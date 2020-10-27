@@ -60,7 +60,6 @@ int Arp_spoofing(pcap_t* handle,Mac atkmac,Ip atkIp,Mac sndmac,Ip sndIp,Ip tgtIp
 	return 0;
 }
 int Request_arp_packet(pcap_t* handle,char* dev,Mac atkmac,Ip atkIp,Ip sender_ip){
-	printf("HIHII");
 	EthArpPacket packet;
 	packet.eth_.dmac_ = Mac("FF:FF:FF:FF:FF:FF");
 	memcpy(&packet.eth_.smac_,&atkmac,sizeof(Mac));
@@ -108,6 +107,7 @@ int main(int argc, char* argv[]) {
 	for (int i=3;i<argc;i+=2){
 		target_ip[k]=argv[i];
 		//std::cout<<target_ip[k]<<'\n';
+		k++;
 	}
 	Mac atkmac;
 	getAtkMac(&atkmac);
@@ -165,6 +165,7 @@ int main(int argc, char* argv[]) {
 				Ip tgtip=htonl(Ip(target_ip[i]));
 				if(strcmp(inet_ntoa(re_ip->ip_src),sender[i])==0){
 					printf("src ip:: %s\n",sender[i]);
+					printf("dst ip:: %s\n", inet_ntoa(re_ip->ip_dst));
 					memcpy(reply_packet->eth_.dmac_,&target_Mac[i],sizeof(Mac));
 					memcpy(reply_packet->eth_.smac_,&atkmac,sizeof(Mac));
 					printf("target MAC:: ");
